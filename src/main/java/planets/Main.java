@@ -11,14 +11,13 @@ public class Main {
 
     public static void main(String[] args){
 
-        Planet planets = new Planet(1200, 800, initCapabilities());
+        SolarSystemSimulator sim = new SolarSystemSimulator(1200, 800, initCapabilities());
         JFrame frame = new JFrame("Planets Demo");
-        frame.getContentPane().add(planets);
-        frame.setSize(planets.getSize());
+        frame.getContentPane().add(sim);
+        frame.setSize(sim.getSize());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        planets.requestFocus();
-
+        sim.requestFocus();
 
     }
 
