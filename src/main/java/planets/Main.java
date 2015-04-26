@@ -1,32 +1,34 @@
 package planets;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.awt.GLJPanel;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
- * Created by robert on 4/25/15.
+ * Created by robert on 4/25/2015.
  */
-public class Main extends GLJPanel{
+public class Main {
 
     public static void main(String[] args){
 
-        JFrame window = new JFrame("Planets");
-        GLCapabilities capabilities = new GLCapabilities(null);
-        Planet planets = new Planet(capabilities);
-        window.getContentPane().add(planets, BorderLayout.CENTER);
-
-        window.pack();
-        window.setLocation(50, 50);
-        window.setResizable(false);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setVisible(true);
-        planets.requestFocusInWindow();
-   }
+        Planet planets = new Planet(1200, 800, initCapabilities());
+        JFrame frame = new JFrame("Planets Demo");
+        frame.getContentPane().add(planets);
+        frame.setSize(planets.getSize());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        planets.requestFocus();
 
 
+    }
+
+    public static GLCapabilities initCapabilities(){
+        GLCapabilities glCapabilities = new GLCapabilities(null);
+        glCapabilities.setRedBits(8);
+        glCapabilities.setAlphaBits(8);
+        glCapabilities.setBlueBits(8);
+        glCapabilities.setGreenBits(8);
+
+        return glCapabilities;
+    }
 }
