@@ -25,7 +25,7 @@ public class SolarSystemSimulator extends GLCanvas implements GLEventListener {
 
     private Sun sun;
 
-    final int FPS = 60;
+    final int FPS = 120;
     private static FPSAnimator animator;
     private static GLU glu;
     static Random r = new Random();
@@ -45,7 +45,7 @@ public class SolarSystemSimulator extends GLCanvas implements GLEventListener {
         super(glCapabilities);
         setSize(width, height);
         addGLEventListener(this);
-        sun = new Sun(3, 100, 20, 5, 100, 100, 1);
+        sun = new Sun(3, 30, 20, 5, 100, 100, 1);
 
     }
 
@@ -81,11 +81,8 @@ public class SolarSystemSimulator extends GLCanvas implements GLEventListener {
         }
         final GL2 gl = glAutoDrawable.getGL().getGL2();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-        //initiate camera
-        setCamera(gl, glu, 1000);
-
+        setCamera(gl, glu, 100);
         setLight(gl);
-
 
         sun.draw(gl, glu);
 
@@ -159,15 +156,18 @@ public class SolarSystemSimulator extends GLCanvas implements GLEventListener {
 
     private void setCamera(GL2 gl, GLU glu, float distance){
 
+        float widthHeightRatio = (float) getWidth() / (float) getHeight();
+
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
 
-        float widthHeightRatio = (float) getWidth() / (float) getHeight();
-        glu.gluPerspective(45, widthHeightRatio, 1, 1000);
-        glu.gluLookAt(0, 0, distance, 0, 0, 0, 0, 1, 0);
+        glu.gluPerspective(90, widthHeightRatio, 1, 1000);
 
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
+
+        glu.gluLookAt(0, 0, distance, 0, 0, 0, 0, 1, 0);
+
     }
 
     public static Texture getEarthTexture(){

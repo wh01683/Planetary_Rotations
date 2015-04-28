@@ -46,7 +46,7 @@ public class Sun {
 
 
         while(this.planets.size() < planets){
-            addPlanet(r.nextFloat()*3, radius/(r.nextFloat()*6 + 3), 10, radius*r.nextFloat()*4+12, 100, 100, r.nextFloat()*5);
+            addPlanet(r.nextFloat()*3, radius/(r.nextFloat()*6 + 3), r.nextFloat()*360, (radius*2)*(r.nextFloat()*4+2), 100, 100, r.nextFloat());
         }
 
 
