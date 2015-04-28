@@ -6,19 +6,39 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.texture.Texture;
 
+import java.util.ArrayList;
+
 /**
  * Created by robert on 4/26/15.
  */
 public class Moon {
 
 
-    private static GLU Glu;
 
+    private static GLU Glu;
     private static final float[] WHITE = {1f, 1f, 1f};
+    private int asteroids, lats, longs;
+    private float radius, angle, orbitRadius, rotationFactor;
+
+
 
 
     public Moon(int asteroids, float radius, float angle, float orbitRadius, int lats, int longs,
-                float rotationFactor, GL2 gl, GLU glu){
+                float rotationFactor){
+
+        this.asteroids = asteroids;
+        this.radius = radius;
+        this.angle = angle;
+        this.orbitRadius = orbitRadius;
+        this.lats = lats;
+        this.longs = longs;
+        this.rotationFactor = rotationFactor;
+
+
+
+    }
+
+    public void draw(GL2 gl, GLU glu){
 
         Texture texture = SolarSystemSimulator.getMoonTexture();
         Glu = glu;
@@ -52,7 +72,6 @@ public class Moon {
 
         gl.glPopMatrix();
     }
-
 
 
 }

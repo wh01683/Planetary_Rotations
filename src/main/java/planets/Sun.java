@@ -6,6 +6,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.texture.Texture;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -15,22 +16,51 @@ public class Sun {
 
     private static GLU Glu;
     Random r = new Random();
+    private int lats, longs;
+    private float radius, angle, orbitRadius, rotationFactor;
+
+
+    private ArrayList<Planet> planets = new ArrayList<Planet>(5);
 
     private static final float[] WHITE = {1f, 1f, 1f};
 
 
     /**
      * creates a new sun spherical object with a specified number of planets orbiting it
+
      * @param planets number of planets orbiting the sphere
      * @param radius radius of the sphere
      * @param lats number of horizontal layers in the sphere
      * @param longs number of vertical layers in the sphere
-     * @param gl gl object
-     * @param glu
      */
 
     public Sun(float planets, float radius, float angle, float orbitRadius,
-               int lats, int longs, float rotationFactor, GL2 gl, GLU glu) {
+               int lats, int longs, float rotationFactor) {
+
+        this.radius = radius;
+        this.angle = angle;
+        this.orbitRadius = orbitRadius;
+        this.lats = lats;
+        this.longs = longs;
+        this.rotationFactor = rotationFactor;
+
+
+        while(this.planets.size() < planets){
+            addPlanet(r.nextFloat()*3, radius/(r.nextFloat()*6 + 3), 10, radius*r.nextFloat()*4+12, 100, 100, r.nextFloat()*5);
+        }
+
+
+    }
+
+    public void addPlanet(float moons, float radius, float angle, float orbitRadius, int lats,
+                          int longs, float rotationFactor){
+
+        Planet planet = new Planet(moons, radius, angle, orbitRadius, lats, longs, rotationFactor);
+        planets.add(planet);
+
+    }
+
+    public void draw(GL2 gl, GLU glu){
 
         Texture texture = SolarSystemSimulator.getSunTexture();
 
@@ -43,6 +73,7 @@ public class Sun {
         final float x = (float) Math.sin(Math.toRadians(angle))*orbitRadius;
         final float y = (float) Math.cos(Math.toRadians(angle))*orbitRadius;
         final float z = 0;
+
         gl.glTranslatef(x, y, z);
         gl.glRotatef(angle, 0, 0, -1);
         gl.glRotatef(45f, 0, 1, 0);
@@ -63,17 +94,12 @@ public class Sun {
         Sun.Glu.gluSphere(sun, radius, longs, lats);
         Sun.Glu.gluDeleteQuadric(sun);
 
-        for(int i = 0; i<planets; i++){
-            addPlanet(r.nextFloat()*3, radius/3, 10, radius*2, 100, 100, 3, gl, glu);
+        for (Planet p : planets){
+            p.draw(gl, glu);
         }
 
         gl.glPopMatrix();
 
 
-    }
-
-    public void addPlanet(float moons, float radius, float angle, float orbitRadius, int lats,
-                          int longs, float rotationFactor, GL2 gl, GLU glu){
-        Planet planet = new Planet(moons, radius, angle, orbitRadius, lats, longs, rotationFactor, gl, glu);
     }
 }

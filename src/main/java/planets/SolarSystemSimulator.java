@@ -23,6 +23,7 @@ public class SolarSystemSimulator extends GLCanvas implements GLEventListener {
     private static final long serialVersionUID = 1L;
     private static final float[] WHITE = {1f, 1f, 1f};
 
+    private Sun sun;
 
     final int FPS = 60;
     private static FPSAnimator animator;
@@ -44,14 +45,17 @@ public class SolarSystemSimulator extends GLCanvas implements GLEventListener {
         super(glCapabilities);
         setSize(width, height);
         addGLEventListener(this);
+        sun = new Sun(3, 100, 20, 5, 100, 100, 1);
+
     }
 
     public void init(GLAutoDrawable glAutoDrawable) {
         glAutoDrawable.setGL(new DebugGL2(glAutoDrawable.getGL().getGL2()));
         final GL2 gl = glAutoDrawable.getGL().getGL2();
 
-        gl.glEnable(GL.GL_DEPTH_TEST);
-        gl.glDepthFunc(GL.GL_LEQUAL);
+        gl.glEnable(GL2.GL_DEPTH_TEST);
+        gl.glDepthMask(true);
+        gl.glDepthFunc(GL2.GL_LEQUAL);
 
         loadTextures();
         animator = new FPSAnimator(this, FPS);
@@ -59,7 +63,8 @@ public class SolarSystemSimulator extends GLCanvas implements GLEventListener {
         gl.glShadeModel(GL2.GL_SMOOTH);
 
         gl.glClearColor(0f, 0f, 0f, 1f);
-        gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+        gl.glHint(GL2.GL_LINE_SMOOTH_HINT, GL2.GL_NICEST);
+
         glu = new GLU();
 
         animator.start();
@@ -81,7 +86,8 @@ public class SolarSystemSimulator extends GLCanvas implements GLEventListener {
 
         setLight(gl);
 
-        Sun sun = new Sun(3, 100, 20, 5, 100, 100, 1, gl, glu);
+
+        sun.draw(gl, glu);
 
     }
 
@@ -95,25 +101,31 @@ public class SolarSystemSimulator extends GLCanvas implements GLEventListener {
     private static void setLight(GL2 gl){
 
         float SHINE_ALL_DIRECTIONS = 1;
-        //TODO: replace coordinates with coordinates of the sun to simulate light coming from the sun
-        float[] lightPos = {0, 0, 0, SHINE_ALL_DIRECTIONS};
+
+        float[] lightPos1 = {0, 0, 0, SHINE_ALL_DIRECTIONS};
+        float[] lightPos2 = {-30, 0, 0, SHINE_ALL_DIRECTIONS};
+
         float[] lightColorAmbient = {.2f, .2f, .2f, 1f};
         float[] lightColorSpecular = {0.8f, 0.8f, 0.8f, 1f};
 
         // Set light parameters.
-        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, lightPos, 0);
+        gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, lightPos1, 0);
         gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightColorAmbient, 0);
         gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, lightColorSpecular, 0);
 
         // Enable lighting in GL.
         gl.glEnable(GL2.GL_LIGHT1);
         gl.glEnable(GL2.GL_LIGHTING);
-/*
-        float[] rgba = {.3f, .5f, 1f};
 
-        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, rgba, 0);
-        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, rgba, 0);
-        gl.glMaterialf(GL2.GL_FRONT, GL2.GL_SHININESS, .5f);*/
+        gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_POSITION, lightPos2, 0);
+        gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_AMBIENT, lightColorAmbient, 0);
+        gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPECULAR, lightColorSpecular, 0);
+
+        // Enable lighting in GL.
+        gl.glEnable(GL2.GL_LIGHT2);
+        gl.glEnable(GL2.GL_LIGHTING);
+
+
 
 
     }
